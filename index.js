@@ -1,11 +1,15 @@
 const API_KEY = "29b21876-09d9-4fdc-9346-a074e0a3096e";
-const API_URL_TOP100 =
+const API_URL_TOP250 =
   "https://kinopoiskapiunofficial.tech/api/v2.2/films/top?type=TOP_250_BEST_FILMS";
 
 const URL_FOR_SEARCH =
   "https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword?keyword=";
 
-getMovies(API_URL_TOP100);
+function createUrlForPagination(pageId) {
+  return `${API_URL_TOP250}&page=${pageId}`;
+}
+
+getMovies(API_URL_TOP250);
 
 async function getMovies(url) {
   const response = await fetch(url, {
@@ -40,7 +44,7 @@ function showMovies(data) {
   document.querySelector(".movies").innerHTML = "";
 
   data.films.forEach((movie) => {
-    // console.log(movie);
+    console.log(movie.filmId);
     const movieEl = document.createElement("div");
     movieEl.classList.add("movie");
     movieEl.innerHTML = `
@@ -65,7 +69,6 @@ function showMovies(data) {
 
 const form = document.querySelector("form");
 const input = document.querySelector(".search");
-console.log(input);
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -75,4 +78,23 @@ form.addEventListener("submit", (e) => {
   const resaltUrlForSearch = `${URL_FOR_SEARCH}${inputValue}`;
   getMovies(resaltUrlForSearch);
   input.value = "";
+});
+
+//POGINATION
+const pagination = document.querySelector(".pagination");
+let pageOne = document.querySelector("#one");
+
+pageOne.addEventListener("click", () => {
+  getMovies(createUrlForPagination("1"));
+  console.log(createUrlForPagination("1"));
+});
+
+let pageTwo = document.querySelector("#two");
+pageTwo.addEventListener("click", () => {
+  getMovies(createUrlForPagination("2"));
+});
+
+let pageThree = document.querySelector("#three");
+pageThree.addEventListener("click", () => {
+  getMovies(createUrlForPagination("3"));
 });
